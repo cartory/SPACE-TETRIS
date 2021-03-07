@@ -4,8 +4,8 @@ import {
     LEVEL, POINTS,
     COLORS, SHAPES,
     LINES_PER_LEVEL,
+    KEY,
 } from './constants'
-
 
 class Piece {
     shape: number[][]
@@ -61,13 +61,15 @@ class Piece {
 
 class Game {
     piece: Piece
+    requestId: number
     private next: Piece
     private grid: number[][]
+    private status: GameState
     private inputStrategy: InputStrategy
 
     constructor(
-        private ctx: CanvasRenderingContext2D,
-        private ctxNext: CanvasRenderingContext2D,
+        public ctx: CanvasRenderingContext2D,
+        public ctxNext: CanvasRenderingContext2D,
     ) {
         this.piece = new Piece(this.ctx)
         this.ctx.canvas.width = COLS * BLOCK_SIZE
@@ -170,45 +172,218 @@ class Game {
         this.piece.draw()
     }
 
+    setState(status: GameState) {
+        this.status = status
+    }
+
     setStrategy(inputStrategy: InputStrategy) {
         this.inputStrategy = inputStrategy
     }
 
-    execute(data: (Piece | Game)) {
-        this.inputStrategy.execute(data)
+    execute() {
+        this.inputStrategy.execute(this, this.piece)
+    }
+
+    play() {
+        this.status.play()
+    }
+    pause() {
+        this.status.pause()
+    }
+
+    stop() {
+        this.status.stop()
     }
 }
+
 
 /**
  * @interface InputStrategy
  */
 interface InputStrategy {
-    execute(data: Game | Piece);
+    execute(game: Game, piece?: Piece);
 }
 
 /**
  * @class MoveStrategy
  */
-class MoveStrategy implements InputStrategy {
-    execute(piece: Piece) {
-        piece.move(piece)
+class LeftStrategy implements InputStrategy {
+    execute(game: Game, piece: Piece) {
+        let p = piece
+
+        p.x--
+        if (game.valid(p)) {
+            p.move(p)
+        } else {
+            p.x++
+        }
+
+        game.piece = p
+    }
+}
+class RightStrategy implements InputStrategy {
+    execute(game: Game, piece: Piece) {
+        let p = piece
+        p.x++
+
+        if (game.valid(p)) {
+            p.move(p)
+        } else {
+            p.x--
+        }
+
+        game.piece = piece
     }
 }
 
 class DropStrategy implements InputStrategy {
-    execute(piece: Piece): void {
-        // piece.drop();
+    execute(game: Game, piece: Piece): void {
+        let p = piece
+        if (game.valid(p)) {
+            p.y++
+            p.move(p)
+            account.score += POINTS.SOFT_DROP
+        }
+        game.piece = p
+    }
+}
+class BottomStrategy implements InputStrategy {
+    execute(game: Game, piece: Piece): void {
+        let p = piece
+        while (game.valid(p)) {
+            account.score += POINTS.HARD_DROP;
+            p.y++
+            p.move(p)
+        }
+        game.piece = p
     }
 }
 
 class RotateStrategy implements InputStrategy {
-    execute(piece: Piece): void {
-        throw new Error("Method not implemented.");
+    execute(game: Game, piece: Piece): void {
+        let p = piece
+        for (let y = 0; y < p.shape.length; y++) {
+            for (let x = 0; x < y; ++x) {
+                [p.shape[x][y], p.shape[y][x]] = [p.shape[y][x], p.shape[x][y]]
+            }
+        }
+        p.shape.forEach(row => row.reverse())
+
+        game.piece = p
     }
 }
 
 class PauseStrategy implements InputStrategy {
     execute(game: Game): void {
-        // game.pause()
+        game.setState(new PauseState())
     }
 }
+
+class StopStrategy implements InputStrategy {
+    execute(game: Game) {
+        game.setState(new StopState())
+    }
+}
+
+/**
+ * @interface State
+ */
+
+abstract class GameState {
+    game: Game
+
+    abstract play()
+    abstract stop()
+    abstract pause()
+}
+
+class PlayState extends GameState {
+    play() {
+        animate()
+    }
+    stop() {
+        return this
+    }
+    pause() {
+        return this
+    }
+
+}
+class PauseState extends GameState {
+    play() {
+        return this
+    }
+
+    stop() {
+        return this
+    }
+    pause() {
+        if (!game.requestId) {
+            animate()
+            return;
+        }
+        cancelAnimationFrame(game.requestId)
+        game.requestId = null
+
+        game.ctx.fillStyle = 'rgba(0, 0, 0, .5)'
+        game.ctx.fillRect(0, 8, ROWS, 3)
+
+        game.ctx.font = '2px Arial'
+        game.ctx.fillStyle = 'yellow'
+
+        game.ctx.fillText('PAUSED', 2, 10)
+    }
+}
+
+class StopState extends GameState {
+    play() {
+        return this
+    }
+
+    stop() {
+        cancelAnimationFrame(game.requestId);
+        game.ctx.fillStyle = 'rgba(0, 0, 0, .5)';
+        game.ctx.fillRect(0, 8, ROWS, 3);
+
+        game.ctx.font = '2px Arial';
+        game.ctx.fillStyle = 'red';
+
+        ctx.fillText('GAME OVER', 0, 10)
+    }
+    pause() {
+        return this
+    }
+
+}
+
+let canvas = <HTMLCanvasElement>document.getElementById('board')
+let next = <HTMLCanvasElement>document.getElementById('next')
+
+const game: Game = new Game(
+    canvas.getContext('2d'),
+    next.getContext('2d')
+)
+
+
+const play = () => { 
+    game.reset() 
+    game.play()
+}
+
+const INPUTS = {
+    [KEY.ESC]: () => new StopStrategy(),
+    [KEY.P]: () => new PauseStrategy(),
+
+    [KEY.DOWN]: () => new DropStrategy(),
+    [KEY.LEFT]: () => new LeftStrategy(),
+    [KEY.RIGHT]: () => new RightStrategy(),
+    [KEY.UP]: () => new RotateStrategy(),
+    [KEY.SPACE]: () => new BottomStrategy(),
+}
+
+document.addEventListener('keydown', e => {
+    if (KEY[e.keyCode]) {
+        game.setStrategy(INPUTS[e.keyCode]())
+        game.execute()
+    }
+})
