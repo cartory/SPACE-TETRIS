@@ -43,7 +43,7 @@ body {
     align-items: center;
     align-content: center;
     justify-content: space-evenly;
-    background-image: url('assets/background.jpg');
+    background-image: url('../assets/background.jpg');
     opacity: .8;
 }
 .shooting_star {

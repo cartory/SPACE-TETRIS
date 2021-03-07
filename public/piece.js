@@ -13,7 +13,7 @@ class Piece {
     draw() {
         this.ctx.lineWidth = 0.05
         this.ctx.fillStyle = this.color
-        this.ctx.strokeStyle = '#f0f0f0'        
+        this.ctx.strokeStyle = '#f0f0f0'
         this.shape.forEach((row, y) => {
             row.forEach((value, x) => {
                 if (value > 0) {
@@ -22,6 +22,16 @@ class Piece {
                 }
             });
         });
+    }
+
+    rotate() {
+        for (let y = 0; y < this.shape.length; ++y) {
+            for (let x = 0; x < y; ++x) {
+                [this.shape[x][y], this.shape[y][x]] = [this.shape[y][x], this.shape[x][y]];
+            }
+        }
+        this.shape.forEach(row => row.reverse());
+        return this
     }
 
     /**

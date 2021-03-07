@@ -6,13 +6,9 @@ class Board {
     constructor(ctx, ctxNext) {
         this.ctx = ctx
         this.ctxNext = ctxNext
-        this.init()
-    }
 
-    init() {
         this.ctx.canvas.width = COLS * BLOCK_SIZE
         this.ctx.canvas.height = ROWS * BLOCK_SIZE
-        
         this.ctx.scale(BLOCK_SIZE, BLOCK_SIZE)
     }
 
@@ -24,7 +20,7 @@ class Board {
         this.piece = new Piece(this.ctx)
         this.piece.setStartingPosition()
 
-        this.getNewPiece();
+        this.getNewPiece()
     }
 
     getNewPiece() {
@@ -38,7 +34,19 @@ class Board {
     }
 
     draw() {
-        this.drawBoard();
+        this.ctx.lineWidth = 0.05
+        this.ctx.strokeStyle = '#f0f0f0'
+
+        this.grid.forEach((row, y) => {
+            row.forEach((value, x) => {
+                if (value > 0) {
+                    this.ctx.fillStyle = COLORS[value]
+                    this.ctx.fillRect(x, y, 1, 1)
+                    this.ctx.lineWidth = 0.05
+                    this.ctx.strokeRect(x, y, 1, 1)
+                }
+            });
+        });
         this.piece.draw();
     }
 
@@ -62,7 +70,7 @@ class Board {
     }
 
     clearLines() {
-        let lines = 0;
+        let lines = 0
 
         this.grid.forEach((row, y) => {
             if (row.every(value => value > 0)) {
@@ -70,7 +78,7 @@ class Board {
                 this.grid.splice(y, 1)
                 this.grid.unshift(Array(COLS).fill(0))
             }
-        });
+        })
 
         if (lines > 0) {
             account.lines += lines
@@ -111,35 +119,8 @@ class Board {
         });
     }
 
-    drawBoard() {
-        this.ctx.lineWidth = 0.05
-        this.ctx.strokeStyle = '#f0f0f0'
-
-        this.grid.forEach((row, y) => {
-            row.forEach((value, x) => {   
-                if (value > 0) {
-                    this.ctx.fillStyle = COLORS[value]
-                    this.ctx.fillRect(x, y, 1, 1)
-                    this.ctx.lineWidth = 0.05
-                    this.ctx.strokeRect(x, y, 1, 1)
-                }
-            });
-        });
-    }
-
     getEmptyGrid() {
         return Array.from({ length: ROWS }, () => Array(COLS).fill(0))
-    }
-
-    rotate(piece) {
-        let p = JSON.parse(JSON.stringify(piece));
-        for (let y = 0; y < p.shape.length; ++y) {
-            for (let x = 0; x < y; ++x) {
-                [p.shape[x][y], p.shape[y][x]] = [p.shape[y][x], p.shape[x][y]];
-            }
-        }
-        p.shape.forEach(row => row.reverse());
-        return p;
     }
 
     getLinesClearedPoints(lines) {
