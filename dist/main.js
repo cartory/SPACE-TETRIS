@@ -48,6 +48,7 @@ document.addEventListener('keydown', async event => {
         event.preventDefault();
         let p = moves[event.keyCode](board.piece);
         if (event.keyCode === KEY.SPACE) {
+            await bubble2.play()
             while (board.valid(p)) {
                 account.score += POINTS.HARD_DROP;
                 board.piece.move(p);
