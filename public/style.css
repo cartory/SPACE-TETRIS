@@ -35,7 +35,7 @@ body {
     justify-content: center;
     align-items: center;
     object-fit: cover;
-    background-image: url('./assets/background.jpg');
+    background-image: url('../assets/background.jpg');
 }
 
 .night {
