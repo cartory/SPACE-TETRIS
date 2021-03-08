@@ -41,24 +41,24 @@ ctxNext.scale(BLOCK_SIZE, BLOCK_SIZE);
 document.addEventListener('keydown', async event => {
     if (event.keyCode === KEY.P) {
         pause();
-    }
-    if (event.keyCode === KEY.ESC) {
-        gameOver();
-    } else if (moves[event.keyCode]) {
-        event.preventDefault();
-        let p = moves[event.keyCode](board.piece);
-        if (event.keyCode === KEY.SPACE) {
-            await bubble2.play()
+    } else if (event.keyCode === KEY.ESC) {
+        stop();
+    } else {
+        if (moves[event.keyCode]) {
+            event.preventDefault();
+            let p = moves[event.keyCode](board.piece);
             while (board.valid(p)) {
-                account.score += POINTS.HARD_DROP;
-                board.piece.move(p);
-                p = moves[KEY.DOWN](board.piece);
-            }
-        } else if (board.valid(p)) {
-            await bubble.play()
-            board.piece.move(p);
-            if (event.keyCode === KEY.DOWN) {
-                account.score += POINTS.SOFT_DROP;
+                board.piece.move(p)
+                if (event.keyCode !== KEY.SPACE) {
+                    await bubble.play()
+                    if (event.keyCode === KEY.DOWN) {
+                        account.score += POINTS.SOFT_DROP
+                    }
+                    break;
+                }
+                await bubble2.play()
+                account.score += POINTS.HARD_DROP
+                p = moves[KEY.DOWN](board.piece)
             }
         }
     }

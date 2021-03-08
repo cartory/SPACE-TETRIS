@@ -1,3 +1,36 @@
+class GameState {
+    
+}
+class InputStrategy {
+    execute(game, piece) { 
+    }
+}
+
+class RightStrategy extends InputStrategy {
+    execute(game, piece) { }
+}
+
+class LeftStrategy extends InputStrategy {
+    execute(game, piece) { }
+}
+
+class DropStrategy extends InputStrategy {
+    execute(game, piece) { }
+}
+
+class BottomStrategy extends InputStrategy {
+    execute(game, piece) { }
+}
+
+class PauseStrategy extends InputStrategy {
+    execute(game) { }
+}
+
+class StopStrategy extends InputStrategy {
+    execute(game) { }
+}
+
+
 class Game {
     /**
      * @param {CanvasRenderingContext2D} ctx 
