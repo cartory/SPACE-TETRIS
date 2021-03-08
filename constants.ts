@@ -3,6 +3,29 @@ export const ROWS = 20;
 export const BLOCK_SIZE = 30;
 export const LINES_PER_LEVEL = 10;
 
+export let requestId
+export const animate = (game, now = 0) => {
+    time.elapsed = now - time.start;
+    if (time.elapsed > time.level) {
+        time.start = now;
+        if (!game.drop()) {
+            stop();
+            return;
+        }
+    }
+
+    game.ctx.clearRect(0, 0, game.ctx.canvas.width, game.ctx.canvas.height);
+    game.draw();
+    requestId = requestAnimationFrame(animate);
+}
+
+const updateAccount = (key, value) => {
+    let element = document.getElementById(key);
+    if (element) {
+        element.textContent = value;
+    }
+}
+
 export const COLORS = [
     'none',
 
@@ -30,13 +53,13 @@ export const SHAPES = [
 ];
 
 export const KEY = {
-    ESC     : 27,
-    SPACE   : 32,
-    LEFT    : 37,
-    UP      : 38,
-    RIGHT   : 39,
-    DOWN    : 40,
-    P       : 80
+    ESC: 27,
+    SPACE: 32,
+    LEFT: 37,
+    UP: 38,
+    RIGHT: 39,
+    DOWN: 40,
+    P: 80
 }
 
 export const POINTS = {
@@ -71,6 +94,16 @@ export const LEVEL = {
     19: 30,
     20: 30,
 }
+
+export let account = new Proxy({ score: 0, level: 0, lines: 0 }, {
+    set: (target, key, value) => {
+        target[key] = value;
+        updateAccount(key, value);
+        return true;
+    }
+});
+
+export let time = { start: 0, elapsed: 0, level: LEVEL[account.level] };
 
 Object.freeze(KEY);
 Object.freeze(LEVEL);

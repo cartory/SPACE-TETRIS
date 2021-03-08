@@ -9,7 +9,7 @@ let bubble = document.getElementById('bubble')
 let bubble2 = document.getElementById('bubble2')
 
 let requestId;
-let board = new Board(ctx, ctxNext);
+let board = new Game(ctx, ctxNext);
 
 const updateAccount = (key, value) => {
     let element = document.getElementById(key);

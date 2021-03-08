@@ -1,4 +1,4 @@
-class Board {
+class Game {
     /**
      * @param {CanvasRenderingContext2D} ctx 
      * @param {CanvasRenderingContext2D} ctxNext 

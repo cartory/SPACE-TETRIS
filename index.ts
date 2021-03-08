@@ -1,10 +1,11 @@
 import {
     COLS, ROWS,
     BLOCK_SIZE,
+    account, time,
     LEVEL, POINTS,
     COLORS, SHAPES,
     LINES_PER_LEVEL,
-    KEY,
+    KEY, animate, requestId,
 } from './constants'
 
 class Piece {
@@ -16,7 +17,6 @@ class Piece {
 
     constructor(
         private ctx: CanvasRenderingContext2D,
-
     ) {
         this.typeId = Math.random() * (COLORS.length - 1) + 1 << 0
         this.x = this.y = 0
@@ -87,6 +87,7 @@ class Game {
         this.piece.setStartingPosition()
 
         this.getNewPiece()
+        this.status = new PlayState(this)
     }
 
     valid(p: Piece) {
@@ -134,7 +135,7 @@ class Game {
             if (account.lines >= LINES_PER_LEVEL) {
                 account.level++
                 account.lines -= LINES_PER_LEVEL
-                // time.level = LEVEL[account.level]
+                time.level = LEVEL[account.level]
             }
         }
     }
@@ -242,7 +243,7 @@ class DropStrategy implements InputStrategy {
         if (game.valid(p)) {
             p.y++
             p.move(p)
-            account.score += POINTS.SOFT_DROP
+            // account.score += POINTS.SOFT_DROP
         }
         game.piece = p
     }
@@ -275,31 +276,35 @@ class RotateStrategy implements InputStrategy {
 
 class PauseStrategy implements InputStrategy {
     execute(game: Game): void {
-        game.setState(new PauseState())
+        game.setState(new PauseState(game))
+        game.pause()
     }
 }
 
 class StopStrategy implements InputStrategy {
     execute(game: Game) {
-        game.setState(new StopState())
+        game.setState(new StopState(game))
+        game.stop()
     }
 }
 
 /**
- * @interface State
+ * @interface GameState
  */
 
 abstract class GameState {
-    game: Game
-
+    constructor(protected game: Game) { }
     abstract play()
     abstract stop()
     abstract pause()
 }
 
 class PlayState extends GameState {
+    constructor(game: Game) {
+        super(game)
+    }
     play() {
-        animate()
+        animate(game)
     }
     stop() {
         return this
@@ -310,6 +315,11 @@ class PlayState extends GameState {
 
 }
 class PauseState extends GameState {
+
+    constructor(game: Game) {
+        super(game)
+    }
+
     play() {
         return this
     }
@@ -319,7 +329,7 @@ class PauseState extends GameState {
     }
     pause() {
         if (!game.requestId) {
-            animate()
+            animate(game)
             return;
         }
         cancelAnimationFrame(game.requestId)
@@ -336,6 +346,11 @@ class PauseState extends GameState {
 }
 
 class StopState extends GameState {
+
+    constructor(game: Game) {
+        super(game)
+    }
+
     play() {
         return this
     }
@@ -348,7 +363,7 @@ class StopState extends GameState {
         game.ctx.font = '2px Arial';
         game.ctx.fillStyle = 'red';
 
-        ctx.fillText('GAME OVER', 0, 10)
+        game.ctx.fillText('GAME OVER', 0, 10)
     }
     pause() {
         return this
@@ -363,12 +378,6 @@ const game: Game = new Game(
     canvas.getContext('2d'),
     next.getContext('2d')
 )
-
-
-const play = () => { 
-    game.reset() 
-    game.play()
-}
 
 const INPUTS = {
     [KEY.ESC]: () => new StopStrategy(),
@@ -387,3 +396,10 @@ document.addEventListener('keydown', e => {
         game.execute()
     }
 })
+
+const main = () => {
+    game.reset()
+    game.play()
+}
+
+main()
