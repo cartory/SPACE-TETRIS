@@ -1,1 +1,29 @@
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" id="Capa_1" x="0" y="0" version="1.1" viewBox="0 0 512 512" xml:space="preserve" style="enable-background:new 0 0 512 512"><g><rect style="fill:#f6ab27" width="170.667" height="170.667" y="256"/><g><polygon style="fill:#ec9130" points="44.912 300.912 44.912 381.754 0 426.667 0 256"/><polygon style="fill:#ec9130" points="170.667 256 170.667 426.667 125.754 381.754 125.754 300.912"/></g><rect style="fill:#fccc88" width="80.842" height="80.842" x="44.912" y="300.912"/><rect style="fill:#5496ce" width="170.667" height="170.667" x="170.667" y="256"/><g><polygon style="fill:#336a93" points="215.579 300.912 215.579 381.754 170.667 426.667 170.667 256"/><polygon style="fill:#336a93" points="341.333 256 341.333 426.667 296.421 381.754 296.421 300.912"/></g><rect style="fill:#36b6d6" width="80.842" height="80.842" x="215.579" y="300.912"/><rect style="fill:#ff6c77" width="170.667" height="170.667" x="341.333" y="256"/><g><polygon style="fill:#ed634c" points="512 256 512 426.667 467.088 381.754 467.088 300.912"/><polygon style="fill:#ed634c" points="386.246 300.912 386.246 381.754 341.333 426.667 341.333 256"/></g><rect style="fill:#fe9189" width="80.842" height="80.842" x="386.246" y="300.912"/><rect style="fill:#5dc382" width="170.667" height="170.667" x="170.667" y="85.333"/><g><polygon style="fill:#23b972" points="215.579 130.246 215.579 211.088 170.667 256 170.667 85.333"/><polygon style="fill:#23b972" points="341.333 85.333 341.333 256 296.421 211.088 296.421 130.246"/></g><rect style="fill:#8ed7ae" width="80.842" height="80.842" x="215.579" y="130.246"/></g></svg>
+<svg xmlns="http://www.w3.org/2000/svg"
+	xmlns:xlink="http://www.w3.org/1999/xlink" id="Capa_1" x="0" y="0" version="1.1" viewBox="0 0 512 512" xml:space="preserve" style="enable-background:new 0 0 512 512">
+	<g>
+		<rect style="fill:#f6ab27" width="170.667" height="170.667" y="256"/>
+		<g>
+			<polygon style="fill:#ec9130" points="44.912 300.912 44.912 381.754 0 426.667 0 256"/>
+			<polygon style="fill:#ec9130" points="170.667 256 170.667 426.667 125.754 381.754 125.754 300.912"/>
+		</g>
+		<rect style="fill:#fccc88" width="80.842" height="80.842" x="44.912" y="300.912"/>
+		<rect style="fill:#5496ce" width="170.667" height="170.667" x="170.667" y="256"/>
+		<g>
+			<polygon style="fill:#336a93" points="215.579 300.912 215.579 381.754 170.667 426.667 170.667 256"/>
+			<polygon style="fill:#336a93" points="341.333 256 341.333 426.667 296.421 381.754 296.421 300.912"/>
+		</g>
+		<rect style="fill:#36b6d6" width="80.842" height="80.842" x="215.579" y="300.912"/>
+		<rect style="fill:#ff6c77" width="170.667" height="170.667" x="341.333" y="256"/>
+		<g>
+			<polygon style="fill:#ed634c" points="512 256 512 426.667 467.088 381.754 467.088 300.912"/>
+			<polygon style="fill:#ed634c" points="386.246 300.912 386.246 381.754 341.333 426.667 341.333 256"/>
+		</g>
+		<rect style="fill:#fe9189" width="80.842" height="80.842" x="386.246" y="300.912"/>
+		<rect style="fill:#5dc382" width="170.667" height="170.667" x="170.667" y="85.333"/>
+		<g>
+			<polygon style="fill:#23b972" points="215.579 130.246 215.579 211.088 170.667 256 170.667 85.333"/>
+			<polygon style="fill:#23b972" points="341.333 85.333 341.333 256 296.421 211.088 296.421 130.246"/>
+		</g>
+		<rect style="fill:#8ed7ae" width="80.842" height="80.842" x="215.579" y="130.246"/>
+	</g>
+</svg>
