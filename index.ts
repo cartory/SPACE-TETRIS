@@ -243,7 +243,7 @@ class DropStrategy implements InputStrategy {
         if (game.valid(p)) {
             p.y++
             p.move(p)
-            // account.score += POINTS.SOFT_DROP
+            account.score += POINTS.SOFT_DROP
         }
         game.piece = p
     }
@@ -380,14 +380,14 @@ const game: Game = new Game(
 )
 
 const INPUTS = {
-    [KEY.ESC]: () => new StopStrategy(),
-    [KEY.P]: () => new PauseStrategy(),
+    [KEY.ESC]   : () => new StopStrategy(),
+    [KEY.P]     : () => new PauseStrategy(),
 
-    [KEY.DOWN]: () => new DropStrategy(),
-    [KEY.LEFT]: () => new LeftStrategy(),
-    [KEY.RIGHT]: () => new RightStrategy(),
-    [KEY.UP]: () => new RotateStrategy(),
-    [KEY.SPACE]: () => new BottomStrategy(),
+    [KEY.DOWN]  : () => new DropStrategy(),
+    [KEY.LEFT]  : () => new LeftStrategy(),
+    [KEY.RIGHT] : () => new RightStrategy(),
+    [KEY.UP]    : () => new RotateStrategy(),
+    [KEY.SPACE] : () => new BottomStrategy(),
 }
 
 document.addEventListener('keydown', e => {
