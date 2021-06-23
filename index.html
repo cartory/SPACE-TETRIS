@@ -48,6 +48,10 @@
     <script>
         var audio = document.getElementById("back")
         audio.volume = 0.8;
+        
+        document.addEventListener('click', async _ => {
+          await audio.play()
+        })
     </script>
 </body>
 
